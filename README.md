@@ -14,6 +14,11 @@ EV es una inteligencia artificial local para Windows que escucha tu micrófono, 
 
 ---
 
+## GitHub Pages
+
+La interfaz estática se publica desde `public/` en <https://benjaminsaid081.github.io/EeVee/>. Pages sirve el HTML, CSS y JavaScript, pero no ejecuta el backend de EV: las funciones que llaman a `/api` solo funcionan al iniciar EV en Windows con `start.bat` y abrir la dirección local que muestra el servidor (normalmente `http://127.0.0.1:4173`).
+
+---
 ## 1. Arrancar
 
 Requisitos: **Windows 10/11**, **Node.js 18 o superior** y un micrófono.
