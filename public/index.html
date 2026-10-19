@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#05060b" />
+    <title>EV · Asistente de escritorio</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-state="idle">
+    <div class="aurora" aria-hidden="true">
+      <span class="blob blob-a"></span>
+      <span class="blob blob-b"></span>
+      <span class="blob blob-c"></span>
+      <span class="grid"></span>
+      <span class="vignette"></span>
+    </div>
+
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">
+            <span>EV</span>
+          </div>
+          <div class="brand-text">
+            <h1>EV</h1>
+            <p>Asistente de escritorio</p>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <div class="pills" id="statusPills">
+            <span class="pill" id="pillBrain" title="Motor de respuestas">
+              <span class="pill-dot"></span><span class="pill-label">Comprobando…</span>
+            </span>
+            <span class="pill" id="pillVoice" title="Motor de voz">
+              <span class="pill-dot"></span><span class="pill-label">Voz</span>
+            </span>
+          </div>
+          <button class="icon-btn" id="btnScreen" aria-label="Compartir pantalla" title="Compartir pantalla con Gemini Live">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2.5" y="4" width="19" height="12.5" rx="2.2" />
+              <path d="M8 20.5h8M12 16.5v4" />
+            </svg>
+          </button>
+          <button class="icon-btn" id="btnSettings" aria-label="Ajustes" title="Ajustes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3.2" />
+              <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1.03 1.56V21a2 2 0 1 1-4 0v-.11a1.7 1.7 0 0 0-1.11-1.56 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3a2 2 0 1 1 0-4h.11A1.7 1.7 0 0 0 4.6 8.86a1.7 1.7 0 0 0-.34-1.87l-.06-.06A2 2 0 1 1 7.03 4.1l.06.06a1.7 1.7 0 0 0 1.87.34H9a1.7 1.7 0 0 0 1.03-1.56V3a2 2 0 1 1 4 0v.11a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9c.26.63.87 1.03 1.56 1.03H21a2 2 0 1 1 0 4h-.11A1.7 1.7 0 0 0 19.4 15Z" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="stage" aria-label="Asistente EV">
+          <div class="orb-shell" id="orbShell">
+            <div class="orb-halo"></div>
+            <div class="orb-ring ring-1"></div>
+            <div class="orb-ring ring-2"></div>
+            <div class="orb-ring ring-3"></div>
+            <div class="orb" id="orb">
+              <div class="orb-core"></div>
+              <div class="orb-sheen"></div>
+              <div class="orb-waves" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i>
+              </div>
+            </div>
+            <div class="orb-orbit"><span></span></div>
+          </div>
+
+          <div class="state-row">
+            <span class="state-dot"></span>
+            <span class="state-text" id="stateText">Lista para escucharte</span>
+          </div>
+          <p class="live-transcript" id="liveTranscript" aria-live="polite"></p>
+
+          <div class="composer">
+            <button class="mic-btn" id="micBtn" aria-label="Activar micrófono" title="Hablar (Ctrl + Espacio)">
+              <span class="mic-ring"></span>
+              <svg class="icon-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round">
+                <rect x="9" y="2.8" width="6" height="11" rx="3" />
+                <path d="M5.5 11.5a6.5 6.5 0 0 0 13 0" />
+                <path d="M12 18v3.2" />
+              </svg>
+              <svg class="icon-stop" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="7.5" y="7.5" width="9" height="9" rx="2.2" />
+              </svg>
+            </button>
+
+            <div class="input-wrap">
+              <input
+                id="input"
+                type="text"
+                placeholder="Escribe un comando…"
+                autocomplete="off"
+                spellcheck="false"
+                aria-label="Comando para EV"
+              />
+              <button class="send-btn" id="sendBtn" aria-label="Enviar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4.5 12h15" />
+                  <path d="m13.5 6 6 6-6 6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="chips" id="chips">
+            <button class="chip" data-cmd="Reproduce música lo-fi para estudiar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 18V5l10-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="16" cy="16" r="3" /></svg>
+              Música lo-fi
+            </button>
+            <button class="chip" data-cmd="Crea una carpeta llamada Proyectos en el escritorio">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H10l2 2.5h6.5A2.5 2.5 0 0 1 21 10v7a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17Z" /></svg>
+              Crear carpeta
+            </button>
+            <button class="chip" data-cmd="Toma una captura de pantalla">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2" /><circle cx="12" cy="12" r="3" /></svg>
+              Captura
+            </button>
+            <button class="chip" data-cmd="¿Qué hay en el escritorio?">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01" stroke-linecap="round" /></svg>
+              Ver escritorio
+            </button>
+            <button class="chip" data-cmd="¿Qué hora es?">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5V12l3 2" stroke-linecap="round" /></svg>
+              La hora
+            </button>
+          </div>
+        </section>
+
+        <aside class="feed-panel" aria-label="Conversación">
+          <div class="feed-head">
+            <div>
+              <h2>Conversación</h2>
+              <p id="feedSubtitle">Todo lo que hablamos queda aquí</p>
+            </div>
+            <button class="ghost-btn" id="btnClear" title="Limpiar conversación">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9.5 7V5.2A1.2 1.2 0 0 1 10.7 4h2.6a1.2 1.2 0 0 1 1.2 1.2V7M6.5 7l.8 12.1A1.9 1.9 0 0 0 9.2 21h5.6a1.9 1.9 0 0 0 1.9-1.9L17.5 7" /></svg>
+              Limpiar
+            </button>
+          </div>
+          <div class="feed" id="feed" aria-live="polite"></div>
+        </aside>
+      </main>
+    </div>
+
+    <!-- Ajustes -->
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <aside class="drawer" id="settingsDrawer" aria-label="Ajustes de EV" aria-hidden="true">
+      <div class="drawer-head">
+        <div>
+          <h2>Ajustes</h2>
+          <p>Claves y comportamiento</p>
+        </div>
+        <button class="icon-btn" id="btnCloseSettings" aria-label="Cerrar ajustes">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18" /></svg>
+        </button>
+      </div>
+
+      <div class="drawer-body">
+        <section class="settings-group">
+          <div class="group-title">
+            <span class="group-icon brain"></span>
+            <div><h3>Inteligencia</h3><p>Elige qué IA responde</p></div>
+          </div>
+
+          <label class="field">
+            <span>Proveedor</span>
+            <select id="selAIProvider">
+              <option value="openai">OpenAI · GPT</option>
+              <option value="gemini">Google Gemini</option>
+              <option value="gemini-live">Google Gemini Live · voz en tiempo real</option>
+              <option value="anthropic">Anthropic Claude</option>
+              <option value="compatible">Otro compatible con OpenAI</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span id="aiKeyLabel">OpenAI API Key</span>
+            <input id="inpAIKey" type="password" placeholder="sk-…" autocomplete="off" />
+          </label>
+
+          <label class="field">
+            <span>Modelo</span>
+            <input id="inpAIModel" type="text" list="aiModels" placeholder="gpt-4o-mini" />
+            <datalist id="aiModels"></datalist>
+          </label>
+
+          <label class="field" id="aiBaseField" hidden>
+            <span>URL base</span>
+            <input id="inpAIBase" type="text" list="aiBasePresets" placeholder="https://openrouter.ai/api/v1" />
+            <datalist id="aiBasePresets">
+              <option value="https://openrouter.ai/api/v1">OpenRouter</option>
+              <option value="https://api.groq.com/openai/v1">Groq</option>
+              <option value="https://api.deepseek.com/v1">DeepSeek</option>
+              <option value="https://api.mistral.ai/v1">Mistral</option>
+              <option value="http://127.0.0.1:11434/v1">Ollama (local)</option>
+              <option value="http://127.0.0.1:1234/v1">LM Studio (local)</option>
+            </datalist>
+          </label>
+
+          <div class="inline-row">
+            <button class="ghost-btn" id="btnTestAI">Probar conexión</button>
+            <span class="tiny" id="aiHint">El proveedor elegido decide las respuestas.</span>
+          </div>
+          <a class="hint-link" id="aiKeyLink" href="https://platform.openai.com/api-keys" target="_blank" rel="noreferrer">Obtener una clave ↗</a>
+        </section>
+
+        <section class="settings-group">
+          <div class="group-title">
+            <span class="group-icon voice"></span>
+            <div><h3>Voz</h3><p>Edge gratis, Gemini o ElevenLabs</p></div>
+          </div>
+
+          <label class="field">
+            <span>Motor de voz</span>
+            <select id="selProvider">
+              <option value="auto">Automático (mejor disponible)</option>
+              <option value="edge">Edge · gratis, sin clave</option>
+              <option value="gemini">Gemini · voz natural</option>
+              <option value="eleven">ElevenLabs</option>
+              <option value="browser">Voz del navegador</option>
+            </select>
+          </label>
+
+          <label class="field" id="edgeVoiceField">
+            <span>Voz de Edge</span>
+            <select id="selEdgeVoice"></select>
+          </label>
+
+          <label class="field" id="geminiVoiceField" hidden>
+            <span>Voz de Gemini</span>
+            <select id="selGeminiVoice"></select>
+          </label>
+
+          <label class="field" id="elevenKeyField">
+            <span>ElevenLabs API Key</span>
+            <input id="inpEleven" type="password" placeholder="Tu clave" autocomplete="off" />
+          </label>
+
+          <label class="field" id="elevenVoiceField">
+            <span>Voice ID de ElevenLabs</span>
+            <input id="inpVoiceId" type="text" list="elevenPremade" placeholder="21m00Tcm4TlvDq8ikWAM" />
+            <datalist id="elevenPremade">
+              <option value="21m00Tcm4TlvDq8ikWAM">Rachel · mujer, neutra</option>
+              <option value="pNInz6obpgDQGcFmaJgB">Adam · hombre, grave</option>
+              <option value="EXAVITQu4vr4xnSDxMaL">Bella · mujer, suave</option>
+              <option value="ErXwobaYiN019PkySvjV">Antoni · hombre, cálido</option>
+              <option value="JBFqnCBsd6RMkjVDRZzb">George · hombre, narrador</option>
+              <option value="pFZP5JQG7iQjIQuC4Bku">Lily · mujer, británica</option>
+              <option value="cgSgspJ2msm6clMCkdW9">Jessica · mujer, expresiva</option>
+            </datalist>
+          </label>
+          <p class="tiny" id="elevenNote">
+            Las voces de la <b>biblioteca</b> requieren plan de pago. Las predeterminadas de la lista funcionan en el plan gratuito.
+          </p>
+
+          <div class="inline-row">
+            <button class="ghost-btn" id="btnTestVoice">Probar voz</button>
+            <span class="tiny" id="voiceHint">Edge es gratis y no necesita clave.</span>
+          </div>
+          <a class="hint-link" id="elevenVoicesLink" href="https://elevenlabs.io/app/voice-library" target="_blank" rel="noreferrer">Ver voces en ElevenLabs ↗</a>
+        </section>
+
+        <!-- Spotify & Google Tools -->
+        <section class="settings-group">
+          <div class="group-title">
+            <span class="group-icon music" style="background: radial-gradient(circle at 30% 30%, #22c55e, #15803d);"></span>
+            <div><h3>Spotify</h3><p>Música en segundo plano sin abrir ventanas</p></div>
+          </div>
+          <p class="tiny">EV reproduce música silenciosamente en la app de Windows. Para búsqueda directa con la API oficial de Spotify (opcional y gratis), añade tus credenciales de Spotify Developer:</p>
+          <label class="field">
+            <span>Spotify Client ID</span>
+            <input id="inpSpotifyId" type="text" placeholder="Tu Client ID de Spotify" autocomplete="off" />
+          </label>
+          <label class="field">
+            <span>Spotify Client Secret</span>
+            <input id="inpSpotifySecret" type="password" placeholder="Tu Client Secret" autocomplete="off" />
+          </label>
+          <div class="inline-row">
+            <button class="ghost-btn" id="btnTestSpotify">Probar Spotify API</button>
+            <button class="ghost-btn" id="btnConnectSpotify">Conectar con Spotify</button>
+          </div>
+          <p class="tiny" id="spotifyStatus">No conectado</p>
+          <p class="tiny" id="spotifyHint">Conecta tu cuenta para cambiar de canción sin abrir la ventana de Spotify.</p>
+          <p class="tiny">
+            Añade en tu app de Spotify Developer esta Redirect URI (sin puerto; sirve para cualquier puerto de EV):
+            <code id="spotifyRedirectUri">http://127.0.0.1/api/spotify/oauth/callback</code>
+          </p>
+          <a class="hint-link" href="https://developer.spotify.com/dashboard" target="_blank" rel="noreferrer">Crear App en Spotify Developer Dashboard ↗</a>
+        </section>
+
+        <section class="settings-group">
+          <div class="group-title">
+            <span class="group-icon calendar" style="background: radial-gradient(circle at 30% 30%, #3b82f6, #1d4ed8);"></span>
+            <div><h3>Google Calendar</h3><p>Consultar y agendar citas por voz</p></div>
+          </div>
+          <label class="field">
+            <span>Google Client ID</span>
+            <input id="inpGoogleId" type="text" placeholder="xxxx.apps.googleusercontent.com" autocomplete="off" />
+          </label>
+          <label class="field">
+            <span>Google Client Secret</span>
+            <input id="inpGoogleSecret" type="password" placeholder="Tu Google Client Secret" autocomplete="off" />
+          </label>
+          <div class="inline-row" style="margin-top: 0.5rem;">
+            <button class="ghost-btn" id="btnConnectGoogle">Conectar con Google</button>
+            <span class="tiny" id="googleStatus">No conectado</span>
+          </div>
+          <p class="tiny">
+            En Google Cloud Console crea credenciales OAuth Web y agrega en "URIs de redireccionamiento autorizados": <code>http://127.0.0.1:4173/api/google/oauth/callback</code>
+          </p>
+          <a class="hint-link" href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noreferrer">Consola de Google Cloud ↗</a>
+        </section>
+
+        <section class="settings-group">
+          <div class="group-title">
+            <span class="group-icon sliders"></span>
+            <div><h3>Comportamiento</h3><p>Micrófono y permisos</p></div>
+          </div>
+
+          <div class="switch-row">
+            <div><strong>Hablar las respuestas</strong><span>EV lee en voz alta lo que responde</span></div>
+            <button class="switch" id="swVoice" role="switch" aria-checked="true"><span></span></button>
+          </div>
+          <div class="switch-row">
+            <div><strong>Conversación continua</strong><span>Te escucha, detecta cuando callas y responde solo</span></div>
+            <button class="switch" id="swConversation" role="switch" aria-checked="true"><span></span></button>
+          </div>
+
+          <div class="field-row">
+            <label class="field">
+              <span>Pausa para responder</span>
+              <select id="selVadSilence">
+                <option value="600">Rápida · 0,6 s</option>
+                <option value="900">Normal · 0,9 s</option>
+                <option value="1400">Pausada · 1,4 s</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>Sensibilidad</span>
+              <select id="selVadSensitivity">
+                <option value="1.6">Alta</option>
+                <option value="1">Media</option>
+                <option value="0.6">Baja</option>
+              </select>
+            </label>
+          </div>
+          <div class="switch-row">
+            <div><strong>Comandos avanzados</strong><span>Permite PowerShell (siempre pide confirmación)</span></div>
+            <button class="switch" id="swShell" role="switch" aria-checked="false"><span></span></button>
+          </div>
+
+          <label class="field range-field">
+            <span>Volumen de la voz <b id="volLabel">90%</b></span>
+            <input id="inpVolume" type="range" min="0" max="100" value="90" />
+          </label>
+        </section>
+
+        <p class="privacy-note">
+          Las claves se guardan solo en tu PC, en <code>config/ev.config.json</code>. El servidor escucha únicamente en 127.0.0.1.
+        </p>
+      </div>
+
+      <div class="drawer-foot">
+        <button class="primary-btn" id="btnSave">Guardar ajustes</button>
+      </div>
+    </aside>
+
+    <!-- Confirmación -->
+    <div class="modal-backdrop" id="confirmBackdrop">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+        <div class="modal-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 9v4.5M12 17h.01" /><path d="M10.3 3.9 2.9 17a2 2 0 0 0 1.7 3h14.8a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" /></svg>
+        </div>
+        <h3 id="confirmTitle">¿Confirmas la acción?</h3>
+        <p id="confirmText">Esta acción necesita tu permiso.</p>
+        <div class="modal-actions">
+          <button class="ghost-btn" id="btnCancelConfirm">Cancelar</button>
+          <button class="primary-btn" id="btnAcceptConfirm">Sí, hazlo</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast-stack" id="toasts"></div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>

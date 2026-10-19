@@ -1,0 +1,6 @@
+node_modules/
+.env
+config/ev.config.json
+models/
+.tmp/
+*.log

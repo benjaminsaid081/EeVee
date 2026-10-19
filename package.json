@@ -1,0 +1,21 @@
+{
+  "name": "ev-assistant",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EV - Asistente de escritorio con voz (ElevenLabs) e inteligencia (OpenAI) que controla tu PC.",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@andresaya/edge-tts": "^1.9.1",
+    "@huggingface/transformers": "^4.3.1",
+    "express": "^4.19.2",
+    "sharp": "^0.35.5",
+    "ws": "^8.22.0"
+  }
+}
